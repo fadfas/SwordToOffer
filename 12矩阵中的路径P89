@@ -1,0 +1,61 @@
+#include<iostream>	
+#include<string>
+#include<ctime>
+#include<cstdlib>
+using std::cout;
+using std::endl;
+
+bool hasPathCore(char* matrix, int rows, int cols, int row, int col, char* str, int pathLength,bool* visted) {
+	if (str[pathLength] == '\0') {
+		return true;
+	}
+	
+	bool hasPath = false;
+	if (row >= 0 && row < rows&&col >= 0 && col < cols && !visted[row*cols + col] && str[pathLength] == matrix[row*cols + col]) {
+		++pathLength;
+		cout << "row is " << row << " col is " << col << " outcome is ?" << endl;
+		visted[row*cols + col] = true;
+
+		hasPath = hasPathCore(matrix, rows, cols, row, col - 1, str, pathLength, visted) || hasPathCore(matrix, rows, cols, row - 1, col, str, pathLength, visted) || hasPathCore(matrix, rows, cols, row, col + 1, str, pathLength, visted) || hasPathCore(matrix, rows, cols, row + 1, col, str, pathLength, visted);
+		
+		if (!hasPath) {
+			--pathLength;
+			visted[row*cols + col] = false;
+		}
+
+
+	}
+	return hasPath;
+}
+
+bool hasPath(char* matrix, int rows, int cols, char* str)
+{
+	if (matrix == nullptr || rows <= 0 || cols <= 0 || str == nullptr) {
+		return false;
+	}
+
+	bool *visted = new bool[rows*cols];
+	memset(visted, 0, rows*cols);
+
+	int pathLength = 0;
+
+	for (int row = 0; row < rows; ++row) {
+		for (int col = 0; col < cols; ++col) {
+			if (hasPathCore(matrix, rows, cols, row, col, str,pathLength,visted )) {
+				return true;
+				cout << "row is " << row << "col is " << col << " outcome is true" << endl;
+			}
+		}
+	}
+
+	return false;
+
+}
+
+
+int main() {
+	char a[] = "ABCESFCSADEE";
+	char b[] = "ABCCED";
+	cout << hasPath(a, 3, 4, b) << endl;
+
+}
