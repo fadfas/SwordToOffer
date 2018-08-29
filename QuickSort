@@ -1,0 +1,62 @@
+#include<iostream>	
+#include<string>
+#include<ctime>
+#include<cstdlib>
+using std::cout;
+using std::endl;
+
+int RandomPivot(int start, int end) {
+	srand((unsigned)time(NULL));	
+	return	rand() % (end - start+1)+start;
+	
+}
+
+void swap(int data[], int a, int b) {
+	int temp = data[a];
+	data[a] = data[b];
+	data[b] = temp;
+}
+int Partition(int data[], int length, int start, int end) {
+	if (data == nullptr || length <= 0 || start < 0 || end >= length) {
+		throw new std::exception("Invalid Parameters");
+	}
+
+	int pivot = RandomPivot(start, end);
+	swap(data, pivot, end);
+
+	int small = start - 1;
+	for (int index = start; index < end; ++index) {
+		if (data[index] < data[end]) {
+			++small;
+			if (small != index) {
+				swap(data, small, index);
+			}
+		}
+	}
+
+	++small;
+	swap(data, small, end);
+	}
+
+void QuickSort(int data[], int length, int start, int end) {
+	if (start == end) {
+		return;
+	}
+
+	int small = Partition(data, length, start, end);
+	if (small > start) {
+		QuickSort(data, length, start, small - 1);
+	}
+	if (small < end) {
+		QuickSort(data, length, small + 1, end);
+	}
+}
+
+int main() {
+	int test[] = { 0,1,2,3,4,5,6,7 };
+	QuickSort(test,8,0,7);
+	for (auto i : test) {
+		cout << i << endl;
+	}
+
+}
