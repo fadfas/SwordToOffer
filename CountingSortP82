@@ -1,0 +1,40 @@
+#include<iostream>	
+#include<string>
+#include<ctime>
+#include<cstdlib>
+using std::cout;
+using std::endl;
+
+void SortAges(int ages[], int length) {
+	if (ages == 0 || length <= 0) {
+		throw new std::exception("Invalid Input.");
+	}
+
+	const int oldestAge = 99;
+	int timesOfAge[oldestAge + 1];
+
+	for (int i = 0; i <= oldestAge; ++i) {
+		timesOfAge[i] = 0;
+	}
+
+	for (int i = 0; i < length; ++i) {
+		int age = ages[i];
+		++timesOfAge[age];
+	}
+	int index = 0;
+	for (int i = 0; i <= oldestAge; ++i) {
+		for (int j = 0; j < timesOfAge[i]; ++j) {
+			ages[index] = i;
+			++index;
+		}
+	}
+}
+
+int main() {
+	int test[] = { 2,5,2,3,3,5,6,7 };
+	SortAges(test, 8);
+	for (auto i : test) {
+		cout << i << endl;
+	}
+
+}
