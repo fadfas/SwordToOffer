@@ -1,0 +1,53 @@
+#include<iostream>	
+#include<string>
+#include<ctime>
+#include<cstdlib>
+using std::cout;
+using std::endl;
+
+int getDigitSum(int number) {
+	int sum = 0;
+
+	while (number > 0) {
+		sum += number % 10;
+		number /= 10;
+	}
+
+	return sum;
+}
+
+int movingCountCore(int threshold, int rows, int cols,int row,int col,bool *visted) {
+	
+	if ((threshold < (getDigitSum(row) + getDigitSum(col) ))||row<0||row>=rows||col<0||col>=cols||visted[row*cols+col]) {
+		return 0;
+	}
+	visted[row*cols + col] = 1;
+	int count = 0;
+
+	count =1+ movingCountCore(threshold, rows, cols, row, col - 1, visted) +
+		movingCountCore(threshold, rows, cols, row, col + 1, visted) +
+		movingCountCore(threshold, rows, cols, row - 1, col, visted) +
+		movingCountCore(threshold, rows, cols, row + 1, col, visted);
+
+	return count;
+	
+}
+
+int movingCount(int threshold, int rows, int cols) {
+	if (threshold < 0 || rows < 0 || cols < 0) {
+		return 0;
+	}
+
+	bool *visted = new bool[rows*cols];
+	memset(visted, 0, rows*cols);
+	//cout << __func__ << endl;
+	int count = movingCountCore(threshold, rows, cols, 0, 0, visted);
+
+	return count;
+}
+
+
+int main() {
+	cout << movingCount(8, 8, 7) << endl;
+
+}
