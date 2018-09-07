@@ -1,0 +1,54 @@
+#include<iostream>	
+#include<string>
+#include<ctime>
+#include<cstdlib>
+#include<cmath>
+#include<cstring>
+using std::cout;
+using std::endl;
+
+struct ListNode {
+	int m_nValue;
+	ListNode *m_pNext;
+};
+
+void DeleteNode(ListNode **pListHead, ListNode *pToBeDeleted) {
+	if (!pListHead || !pToBeDeleted) {
+		return;
+	}
+
+	if (pToBeDeleted->m_pNext != nullptr) {
+		ListNode *temp = pToBeDeleted->m_pNext;
+		pToBeDeleted->m_nValue = temp->m_nValue;
+		pToBeDeleted->m_pNext = temp->m_pNext;
+
+		delete temp;
+		temp = nullptr;
+
+	}
+	else if(*pListHead==pToBeDeleted){
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+		*pListHead = nullptr;
+	}
+	else
+	{
+		ListNode *pNext = *pListHead;
+		while (pNext->m_pNext!=pToBeDeleted)
+		{
+			pNext = pNext->m_pNext;
+		}
+
+		pNext->m_pNext = nullptr;
+		delete pToBeDeleted;
+		pToBeDeleted = nullptr;
+
+	}
+
+
+}
+
+int main() {
+
+	
+}
