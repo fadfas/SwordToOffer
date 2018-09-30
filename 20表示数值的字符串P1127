@@ -1,0 +1,58 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+
+bool scanUnsignedInteger(const char** str) {
+	const char* before = *str;
+	while (**str != '\0'&&**str >= '0'&&**str <= '9') {
+		++(*str);
+	}
+
+	return before < *str;
+}
+
+bool scanInteger(const char** str) {
+	if (**str == '+' || **str == '-') {
+		++(*str);
+	}
+	return scanUnsignedInteger(str);
+}
+
+bool isNumeric(const char* str) {
+	if (str == nullptr) {
+		return false;
+	}
+
+	bool numeric = scanInteger(&str);
+
+	if (*str == '.') {
+		++(str);
+		numeric =  scanUnsignedInteger(&str) || numeric  ; //注意短路“或”，两个元素的顺序要注意（因为scanUnsignedInteger会
+															//改变str指针所指的位置
+	}
+
+	if (*str == 'e' || *str == 'E') {
+		++str;
+		numeric = numeric && scanInteger(&str);
+	}
+
+	return numeric && (*str == '\0');
+}
+
+
+int main() {
+	if (isNumeric("123.45e+6")) {
+		cout << "True" << endl;	
+	}
+	else
+	{
+		cout << "False" << endl;
+	}
+
+}
