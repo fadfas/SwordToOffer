@@ -1,0 +1,28 @@
+
+class Solution {
+public:
+
+	std::stack<int> myStack;
+	std::stack<int> minStack;
+
+	void push(int value) {
+		myStack.push(value);
+
+		if (minStack.size == 0 || minStack.top() >= value) {
+			minStack.push(value);
+		}
+		else {
+			minStack.push(minStack.top());
+		}
+	}
+	void pop() {
+		myStack.pop();
+		minStack.pop();
+	}
+	int top() {
+		return myStack.top();
+	}
+	int min() {
+		return minStack.top();
+	}
+};
