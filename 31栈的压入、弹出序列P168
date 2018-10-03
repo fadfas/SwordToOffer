@@ -1,0 +1,35 @@
+bool IsPopOrder(vector<int> pushV, vector<int> popV) {
+		std::stack<int> myStack;
+		auto beginPop = popV.begin();
+		auto endPop = popV.end();
+
+		auto beginPush = pushV.begin();
+		auto endPush = pushV.end();
+
+		while (beginPop != endPop) {
+
+
+			while ((myStack.size() == 0 || myStack.top() != *beginPop) && (beginPush) != endPush) {
+				myStack.push(*beginPush);
+				++beginPush;
+			}
+			if (*beginPop != myStack.top() && beginPush == endPush) {
+				return false;
+			}
+
+			if (myStack.top() == *beginPop)
+			{
+				myStack.pop();
+				++beginPop;
+			
+			}
+			if (beginPop == endPop&& myStack.empty()) {
+				return true;
+			}
+
+		}
+
+		return false;
+
+
+	}
