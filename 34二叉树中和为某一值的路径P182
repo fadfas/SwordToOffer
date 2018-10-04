@@ -1,0 +1,152 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+TreeNode* CreateTreeNode(int value)
+{
+	TreeNode* pNode = new TreeNode(value);
+	pNode->left = nullptr;
+	pNode->right = nullptr;
+
+	return pNode;
+}
+
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pLeft, TreeNode* pRight)
+{
+	if (pParent != nullptr)
+	{
+		pParent->left = pLeft;
+		pParent->right = pRight;
+	}
+}
+
+void PrintTreeNode(const TreeNode* pNode)
+{
+	if (pNode != nullptr)
+	{
+		printf("value of this node is: %d\n", pNode->val);
+
+		if (pNode->left != nullptr)
+			printf("value of its left child is: %d.\n", pNode->left->val);
+		else
+			printf("left child is nullptr.\n");
+
+		if (pNode->right != nullptr)
+			printf("value of its right child is: %d.\n", pNode->right->val);
+		else
+			printf("right child is nullptr.\n");
+	}
+	else
+	{
+		printf("this node is nullptr.\n");
+	}
+
+	printf("\n");
+}
+
+void PrintTree(const TreeNode* pRoot)
+{
+	PrintTreeNode(pRoot);
+
+	if (pRoot != nullptr)
+	{
+		if (pRoot->left != nullptr)
+			PrintTree(pRoot->left);
+
+		if (pRoot->right != nullptr)
+			PrintTree(pRoot->right);
+	}
+}
+
+void FindPathRecursively(TreeNode* pNode, int expectNumber, vector<vector<int>>& result, vector<int>& temp,int sum) {
+	temp.push_back(pNode->val);
+	sum += pNode->val;
+
+	if (pNode->left == nullptr&&pNode->right == nullptr) {
+		if (sum == expectNumber) {
+			
+			result.push_back(temp);
+		}
+
+	}
+
+	if (pNode->left) {
+		FindPathRecursively(pNode->left, expectNumber, result, temp, sum);
+	}
+
+	if (pNode->right) {
+		FindPathRecursively(pNode->right, expectNumber, result, temp, sum);
+	}
+
+	temp.pop_back();
+	return;
+}
+
+vector<vector<int> > FindPath(TreeNode* root, int expectNumber) {
+	vector<vector<int>> result;
+	vector<int> temp;
+	if (root == nullptr) {
+		return result;
+	}
+	int sum = 0;
+	FindPathRecursively( root, expectNumber, result, temp,sum);
+
+	return result;
+}
+
+
+int main(int argc, char* argv[])
+{
+	TreeNode* pNode10 = CreateTreeNode(10);
+	TreeNode* pNode5 = CreateTreeNode(5);
+	TreeNode* pNode12 = CreateTreeNode(12);
+	TreeNode* pNode4 = CreateTreeNode(4);
+	TreeNode* pNode7 = CreateTreeNode(7);
+
+	ConnectTreeNodes(pNode10, pNode5, pNode12);
+	ConnectTreeNodes(pNode5, pNode4, pNode7);
+
+	vector<vector<int>> resut = FindPath(pNode10, 22);
+
+	auto begin = resut.begin();
+	auto end = resut.end();
+
+	while (begin != end) {
+		vector<int> each = *begin;
+
+		auto eachBegin = each.begin();
+		auto eachEnd = each.end();
+
+		while (eachBegin!=eachEnd)
+		{
+			cout << *eachBegin << endl;
+			++eachBegin;
+		}
+		++begin;
+	}
+
+
+
+}
