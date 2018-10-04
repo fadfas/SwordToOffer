@@ -1,0 +1,191 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+TreeNode* CreateTreeNode(int value)
+{
+	TreeNode* pNode = new TreeNode(value);
+	pNode->left = nullptr;
+	pNode->right = nullptr;
+
+	return pNode;
+}
+
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pLeft, TreeNode* pRight)
+{
+	if (pParent != nullptr)
+	{
+		pParent->left = pLeft;
+		pParent->right = pRight;
+	}
+}
+
+void PrintTreeNode(const TreeNode* pNode)
+{
+	if (pNode != nullptr)
+	{
+		printf("value of this node is: %d\n", pNode->val);
+
+		if (pNode->left != nullptr)
+			printf("value of its left child is: %d.\n", pNode->left->val);
+		else
+			printf("left child is nullptr.\n");
+
+		if (pNode->right != nullptr)
+			printf("value of its right child is: %d.\n", pNode->right->val);
+		else
+			printf("right child is nullptr.\n");
+	}
+	else
+	{
+		printf("this node is nullptr.\n");
+	}
+
+	printf("\n");
+}
+
+void PrintTree(const TreeNode* pRoot)
+{
+	PrintTreeNode(pRoot);
+
+	if (pRoot != nullptr)
+	{
+		if (pRoot->left != nullptr)
+			PrintTree(pRoot->left);
+
+		if (pRoot->right != nullptr)
+			PrintTree(pRoot->right);
+	}
+}
+
+
+
+
+vector<string> PrintFromTopToBottom(TreeNode* root) {
+
+	vector<string> printSeq;
+	std::stack<TreeNode*> oddLayer;
+	std::stack<TreeNode*> evenLayer;
+
+	if (root == nullptr) {
+		return printSeq;
+	}
+	bool isOddLayer = true;
+
+	oddLayer.push(root);
+	while ((!oddLayer.empty()) || (!evenLayer.empty())) {
+		if (isOddLayer) {
+			while (!oddLayer.empty()) {
+				TreeNode* temp = oddLayer.top();
+				oddLayer.pop();
+
+				printSeq.push_back(std::to_string(temp->val));
+
+				if (temp->left) {
+					evenLayer.push(temp->left);
+				}
+
+				if (temp->right) {
+					evenLayer.push(temp->right);
+				}
+			}
+			isOddLayer = !isOddLayer;
+			printSeq.push_back("\n");
+		}
+		else
+		{
+			while (!evenLayer.empty()) {
+				TreeNode* temp = evenLayer.top();
+				evenLayer.pop();
+
+				printSeq.push_back(std::to_string(temp->val));
+
+				
+				if (temp->right) {
+					oddLayer.push(temp->right);
+				}
+				if (temp->left) {
+					oddLayer.push(temp->left);
+				}
+
+			}
+			isOddLayer = !isOddLayer;
+			printSeq.push_back("\n");
+		}
+	}
+
+	return printSeq;
+}
+
+
+
+
+int main(int argc, char* argv[])
+{
+	TreeNode* pNode11 = CreateTreeNode(11);
+
+	TreeNode* pNode21 = CreateTreeNode(21);
+	TreeNode* pNode22 = CreateTreeNode(22);
+
+	TreeNode* pNode31 = CreateTreeNode(31);
+	TreeNode* pNode32 = CreateTreeNode(32);
+	TreeNode* pNode33 = CreateTreeNode(33);
+	TreeNode* pNode34 = CreateTreeNode(34);
+
+	TreeNode* pNode41 = CreateTreeNode(41);
+	TreeNode* pNode42 = CreateTreeNode(42);
+	TreeNode* pNode43 = CreateTreeNode(43);
+	TreeNode* pNode44 = CreateTreeNode(44);
+	TreeNode* pNode45 = CreateTreeNode(45);
+	TreeNode* pNode46 = CreateTreeNode(46);
+	TreeNode* pNode47 = CreateTreeNode(47);
+	TreeNode* pNode48 = CreateTreeNode(48);
+
+
+	ConnectTreeNodes(pNode11, pNode21, pNode22);
+
+	ConnectTreeNodes(pNode21, pNode31, pNode32);
+	ConnectTreeNodes(pNode22, pNode33, pNode34);
+
+	ConnectTreeNodes(pNode31, pNode41, pNode42);
+	ConnectTreeNodes(pNode32, pNode43, pNode44);
+	ConnectTreeNodes(pNode33, pNode45, pNode46);
+	ConnectTreeNodes(pNode34, pNode47, pNode48);
+
+	PrintTree(pNode11);
+
+	vector<string> outcome = PrintFromTopToBottom(pNode11);
+
+	auto begin = outcome.begin();
+	auto end = outcome.end();
+
+	while (begin != end) {
+		cout << "  ";
+		cout << *begin;
+		++begin;
+	}
+
+
+}
