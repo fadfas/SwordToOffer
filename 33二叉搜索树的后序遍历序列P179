@@ -1,0 +1,75 @@
+
+bool VerifySquenceOfBSTCore(vector<int> sequence) {
+
+
+	auto begin = sequence.begin();
+	auto end = sequence.end();
+
+	if (begin + 1 == end) {
+		return true;
+	}
+
+	int rootNum = *(end - 1);
+
+	vector<int> lower;
+	vector<int> higher;
+
+	bool left = true;
+	bool right = true;
+
+	auto firstLargerThanRootNumOrigianl = sequence.begin();
+	auto firstLargerThanRootNum = sequence.begin();
+	while (*firstLargerThanRootNum<rootNum)
+	{
+		++firstLargerThanRootNum;
+	}
+	if (!(firstLargerThanRootNum == firstLargerThanRootNumOrigianl)) {
+		lower.assign(begin, firstLargerThanRootNum);
+		left = VerifySquenceOfBSTCore(lower);
+	}
+	
+	if (*firstLargerThanRootNum != rootNum) {
+		higher.assign(firstLargerThanRootNum, end - 1);
+		auto higherBegin = higher.begin();
+		auto higherEnd = higher.end();
+
+		while (higherBegin != higherEnd) {
+			if (*higherBegin < rootNum) {
+				return false;
+			}
+
+			++higherBegin;
+		}
+		right = VerifySquenceOfBSTCore(higher);
+	}
+
+
+	return left && right;
+
+}
+
+
+bool VerifySquenceOfBST(vector<int> sequence) {
+	if (sequence.size() == 0) {
+		return false;
+	}
+
+	return VerifySquenceOfBSTCore(sequence);
+}
+
+
+
+int main(int argc, char* argv[])
+{
+	//vector<int> test = { 5,7,6,9,11,10,8 };
+	vector<int> test = { 4,6,7,5 };
+	if (VerifySquenceOfBST(test)) {
+		cout << "True" << endl;
+	}
+	else
+	{
+		cout << "False" << endl;
+	}
+
+
+}
