@@ -1,0 +1,27 @@
+class Solution {
+public:
+	vector<int> PrintFromTopToBottom(TreeNode* root) {
+		vector<int> printSeq;
+		deque<TreeNode*> treeDeque;
+		if (root == nullptr) {
+			return printSeq;
+		}
+
+		treeDeque.push_back(root);
+		while (treeDeque.size()) {
+			TreeNode* temp = treeDeque.front();
+			treeDeque.pop_front();
+
+			printSeq.push_back(temp->val);
+			if (temp->left) {
+				treeDeque.push_back(temp->left);
+			}
+			if (temp->right) {
+				treeDeque.push_back(temp->right);
+			}
+
+		}
+		return printSeq;
+	}
+	
+};
