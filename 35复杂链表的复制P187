@@ -1,0 +1,133 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+struct RandomListNode {
+	int label;
+	struct RandomListNode *next, *random;
+	RandomListNode(int x) :
+		label(x), next(NULL), random(NULL) {
+	}
+};
+
+void PrintRandomList(RandomListNode* pHead) {
+	RandomListNode* pNode = pHead;
+
+	while (pNode) {
+		cout << pNode->label << " ";
+		pNode = pNode->next;
+	}
+	cout << endl;
+	RandomListNode* pNodeSibling = pHead;
+	while (pNodeSibling) {
+		if (pNodeSibling->random) {
+			cout << pNodeSibling->random->label << " ";
+		}
+		else
+		{
+			cout << "#" << " ";
+		}
+
+		pNodeSibling = pNodeSibling->next;
+
+	}
+	cout << endl;
+}
+
+
+
+
+void CloneNodes(RandomListNode* pHead) {
+	RandomListNode* pNode = pHead;
+	RandomListNode* pNodeCopied = pHead;
+	while (pNode) {
+		//RandomListNode cloneNode = *pNode;  //这种方式在while运行过两次后，会导致复制的节点小时，也就是完全变成复制前的样子了
+		RandomListNode* cloneNode = new RandomListNode(pNode->label);
+
+		RandomListNode* pNext = pNode->next;
+
+		pNode->next = cloneNode;
+
+		cloneNode->next = pNext;
+
+		pNode = pNext;
+	}
+}
+
+void ConnectSiblingNodes(RandomListNode* pNode) {
+	while (pNode) {
+		RandomListNode* pCloned = pNode->next;
+
+		RandomListNode* pNodeSibling = pNode->random;
+
+		pCloned->random = pNodeSibling==nullptr?nullptr:pNodeSibling->next;  //此处不可以用?nullptr:pNodeSibling 
+																				//	因为相当于用旧的节点了，OJ会判断无效
+
+		pNode = pCloned->next;
+	}
+}
+
+RandomListNode* ReconnectNodes(RandomListNode* pHead) {
+	RandomListNode* pNode = pHead;
+	RandomListNode* pHeadCloned=pNode->next;
+	RandomListNode* pNodeCloned = pNode->next;
+	
+	//PrintRandomList(pHeadCloned);
+	while (pNodeCloned) {
+		RandomListNode* pNext = pNodeCloned->next;
+
+		pNode->next = pNext;
+		pNodeCloned->next = pNext==nullptr?nullptr: pNext->next;
+
+
+		pNode = pNext;
+		pNodeCloned = pNext==nullptr?nullptr: pNext->next;
+	}
+
+	return pHeadCloned;
+}
+
+
+RandomListNode* Clone(RandomListNode* pHead)
+{
+	if (pHead == nullptr) {
+		return nullptr;
+	}
+
+	CloneNodes(pHead);
+
+	ConnectSiblingNodes(pHead);
+
+	return ReconnectNodes(pHead);
+
+}
+
+int main(int argc, char* argv[])
+{
+	RandomListNode* pNode1 = new RandomListNode(1);
+	RandomListNode* pNode2 = new RandomListNode(2);
+	RandomListNode* pNode3 = new RandomListNode(3);
+
+	pNode1->next = pNode2;
+	pNode1->random = pNode3;
+	
+	pNode2->next = pNode3;
+	
+	RandomListNode* pClonedHead= Clone(pNode1);
+
+	PrintRandomList(pClonedHead);
+
+	
+}
