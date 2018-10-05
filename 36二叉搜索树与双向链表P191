@@ -1,0 +1,102 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+struct RandomListNode {
+	int label;
+	struct RandomListNode *next, *random;
+	RandomListNode(int x) :
+		label(x), next(NULL), random(NULL) {
+	}
+};
+
+void PrintRandomList(RandomListNode* pHead) {
+	RandomListNode* pNode = pHead;
+
+	while (pNode) {
+		cout << pNode->label << " ";
+		pNode = pNode->next;
+	}
+	cout << endl;
+	RandomListNode* pNodeSibling = pHead;
+	while (pNodeSibling) {
+		if (pNodeSibling->random) {
+			cout << pNodeSibling->random->label << " ";
+		}
+		else
+		{
+			cout << "#" << " ";
+		}
+
+		pNodeSibling = pNodeSibling->next;
+
+	}
+	cout << endl;
+}
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+void ConvertRecursively(TreeNode* pNode, TreeNode** maxNode) {
+	if (pNode == nullptr) {
+		return;
+	}
+
+	TreeNode* pCurrent = pNode;
+
+	if (pCurrent->left) {
+		ConvertRecursively(pCurrent->left, maxNode);
+	}
+
+	if (*maxNode) {
+		(*maxNode)->right = pCurrent;
+	}
+	pCurrent->left = *maxNode;
+	(*maxNode) = pCurrent;
+
+	if (pCurrent->right) {
+		ConvertRecursively(pCurrent->right, maxNode);
+	}
+}
+
+TreeNode* Convert(TreeNode* pRootOfTree)
+{
+	if (pRootOfTree == nullptr) {
+		return nullptr;
+	}
+
+	TreeNode* maxNode = nullptr;
+
+	ConvertRecursively(pRootOfTree, &maxNode);
+	TreeNode* pHead = pRootOfTree;
+	while (pHead->left) {
+		pHead = pHead->left;
+	}
+
+	return pHead;
+
+}
+int main(int argc, char* argv[])
+{
+
+
+	
+}
