@@ -1,0 +1,195 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+
+TreeNode* CreateTreeNode(int value)
+{
+	TreeNode* pNode = new TreeNode(value);
+	pNode->left = nullptr;
+	pNode->right = nullptr;
+
+	return pNode;
+}
+
+void ConnectTreeNodes(TreeNode* pParent, TreeNode* pLeft, TreeNode* pRight)
+{
+	if (pParent != nullptr)
+	{
+		pParent->left = pLeft;
+		pParent->right = pRight;
+	}
+}
+
+void PrintTreeNode(const TreeNode* pNode)
+{
+	if (pNode != nullptr)
+	{
+		printf("value of this node is: %d\n", pNode->val);
+
+		if (pNode->left != nullptr)
+			printf("value of its left child is: %d.\n", pNode->left->val);
+		else
+			printf("left child is nullptr.\n");
+
+		if (pNode->right != nullptr)
+			printf("value of its right child is: %d.\n", pNode->right->val);
+		else
+			printf("right child is nullptr.\n");
+	}
+	else
+	{
+		printf("this node is nullptr.\n");
+	}
+
+	printf("\n");
+}
+
+void PrintTree(const TreeNode* pRoot)
+{
+	PrintTreeNode(pRoot);
+
+	if (pRoot != nullptr)
+	{
+		if (pRoot->left != nullptr)
+			PrintTree(pRoot->left);
+
+		if (pRoot->right != nullptr)
+			PrintTree(pRoot->right);
+	}
+}
+
+TreeNode* DeserializeRecursively(char*& str);
+TreeNode* Deserialize(char *&str);
+
+string SerializeRecursively(TreeNode* root) {
+	if (root == nullptr) {
+		return "#,";
+	}
+
+	string result = "";
+	result += std::to_string(root->val);
+	result.push_back(',');
+
+	result += SerializeRecursively(root->left);
+
+	result += SerializeRecursively(root->right);
+
+	return result;
+}
+
+
+char* Serialize(TreeNode *root) {
+	string result_str = SerializeRecursively(root);
+
+	int count = 0;
+	for (auto each : result_str) {
+		if (each == ',') {
+			++count;
+		}
+	}
+
+	char* outcome = new char[count+1];
+	char* result_char = (char *)result_str.c_str();
+
+	char* pTemp = nullptr;
+	char* cursor = strtok_s(result_char, ",", &pTemp);
+	for (int i = 0; i < count; ++i) {
+		outcome[i] = *cursor;
+		cursor = strtok_s(NULL, ",", &pTemp);
+	}
+	outcome[count] = '\0';
+	return outcome;
+}
+
+TreeNode* DeserializeRecursively(char*& str) {  //此处要么使用char*& ，要么使用char**  ，因为若只使用char*，则在最后一层递归，str指向'\0'
+												//	时，再返回上一层递归后，此时pRoot->right = Deserialize(str);这条语句中的str，指向的还是
+												//	'\0'之前的字符。
+	if (*str == '#') {
+		return nullptr;
+	}
+
+	int num = 0;
+	while (*str != '\0'&&*str != ',') {
+		num = num * 10 + ((*str) - '0');
+		++str;
+	}
+
+	TreeNode* pRoot = new TreeNode(num);
+	if (*str == '\0') {
+		return pRoot;
+	}
+	else {
+		++str;
+	}
+
+	pRoot->left = Deserialize(str);
+	pRoot->right = Deserialize(str);
+
+	return pRoot;
+}
+TreeNode* Deserialize(char *&str) {
+	if (*str == '#'||*str=='\0') {
+		return nullptr;
+	}
+
+	return DeserializeRecursively(str);
+}
+int main(int argc, char* argv[])
+{
+	TreeNode* pNode1 = CreateTreeNode(1);
+
+	TreeNode* pNode2 = CreateTreeNode(2);
+	TreeNode* pNode3 = CreateTreeNode(3);
+
+	TreeNode* pNode4 = CreateTreeNode(4);
+	TreeNode* pNode5 = CreateTreeNode(5);
+	TreeNode* pNode6 = CreateTreeNode(6);
+
+
+
+	ConnectTreeNodes(pNode1, pNode2, nullptr);
+
+	ConnectTreeNodes(pNode2, pNode4, nullptr);
+	//ConnectTreeNodes(pNode3, pNode5, pNode6);
+
+
+	char* outcome = Serialize(pNode1);
+	cout << outcome << endl;
+
+
+	//while (*outcome != '\0') {
+	//	cout << *outcome << endl;
+	//	++outcome;
+	//	cout << "--" << endl;
+	//}
+	cout << "=============" << endl;
+
+	char* pTest = (char*) "8,6,10,5,7,9,11";
+
+	TreeNode* pRoot = Deserialize(pTest);
+
+	PrintTree(pRoot);
+
+}
