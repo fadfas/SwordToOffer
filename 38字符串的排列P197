@@ -1,0 +1,64 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+void PermutationRecursively(char* pStr, char* pBegin,std::set<string>& result) {
+	if (*pBegin == '\0') {
+		result.insert(string(pStr));
+		return;
+	}
+	
+	for (char* pTemp = pBegin; *pTemp != '\0'; ++pTemp) {
+		char charTemp = *pTemp;
+		*pTemp = *pBegin;
+		*pBegin = charTemp;
+		
+		PermutationRecursively(pStr, pBegin + 1, result);
+
+		*pBegin = *pTemp;
+		*pTemp = charTemp;
+	  }
+}
+
+vector<string> Permutation(string str) {
+	vector<string> resultVector;
+	std::set<string> resultSet;
+	if (str.size() == 0) {
+		return resultVector;
+	}
+	char* strChar =(char *) str.c_str();
+	
+	PermutationRecursively(strChar, strChar, resultSet);
+
+	auto pSetBegin = resultSet.begin();
+	auto pSetEnd = resultSet.end();
+
+	while (pSetBegin != pSetEnd) {
+		resultVector.push_back(*pSetBegin);
+		++pSetBegin;
+	}
+	return resultVector;
+}
+
+int main(int argc, char* argv[])
+{
+	vector<string> result = Permutation("abc");
+
+	for (auto each : result) {
+		cout << each << endl;
+	}
+
+}
