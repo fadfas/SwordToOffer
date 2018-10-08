@@ -1,0 +1,139 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+int RandomPivort(int start, int end) {
+	int random = rand() % (end - start + 1) + start;
+	return random;
+}
+
+void swap(int* numbers, int length,int a, int b) {
+	//cout << "FUNC:SWAP number a is:" << a << " number b is: " << b << endl;
+	//cout << "FUNC:SWAP befor swap is:" ;
+	//for (int i = 0; i < length; ++i) {
+	//	cout << numbers[i] << " ";
+	//}
+	//cout << endl;
+	int temp = numbers[a];
+	numbers[a] = numbers[b];
+	numbers[b] = temp;
+	//cout << "FUNC:SWAP after swap is:" ;
+	//for (int i = 0; i < length; ++i) {
+	//	cout << numbers[i] << " ";
+	//}
+	//cout << endl;
+}
+
+int Partition(int* numbers, int length,int start,int end) {
+	if (numbers == nullptr || length <= 0||start<0||end>=length) {
+		return 0;
+	}
+
+	int pivort = RandomPivort(start, end);
+	int original = numbers[pivort];
+	cout << endl;
+	cout << "FUNC:Partition pivort is: " << pivort << " original number[pivort] is: " << original << " start is: " << start << " end is: " << end << endl;
+
+	cout << endl;
+
+	int small = start - 1;
+
+	swap(numbers,length,pivort, end);
+	//cout << "FUNC:Partition following swap is in for block" << endl;
+	for (int index = start; index < end; ++index) {
+		if (numbers[index] < numbers[end]) {
+			++small;
+			if (small != index) {
+				swap(numbers,length,small, index);
+			}
+		}
+	}
+	//cout << "FUNC:Partition before swap is in for block" << endl;
+	++small;
+	swap(numbers,length, small, end);
+
+
+	return small;
+}
+
+vector<int> GetLeastNumbers_SolutionCore(int* numbers, int length, int k) {
+	
+	int start = 0;
+	int end = length - 1;
+	int pivot = Partition(numbers, length, start, end);
+
+	while (pivot!=k-1)
+	{
+		if (pivot > k - 1) {
+			end = pivot - 1;
+			pivot = Partition(numbers, length, start, end);
+		}
+		else
+		{
+			start = pivot + 1;
+			pivot = Partition(numbers, length, start, end);
+		}
+	}
+
+	vector<int> result = {};
+
+	for (int i = 0; i < k; ++i) {
+		result.push_back(numbers[i]);
+	}
+
+	return result;
+}
+
+vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+	vector<int> result = {};
+	int size = input.size();
+	if (size == 0||k<=0||k>size) {
+		return result;
+	}
+
+	auto begin = input.begin();
+	auto end = input.end();
+	int* numbers = new int[size];
+	int i = 0;
+	while (begin != end) {
+		numbers[i] = *begin;
+		++begin;
+		++i;
+	}
+	for (int i = 0; i < size; ++i) {
+		cout << numbers[i] << " ";
+	}
+	cout << endl;
+	cout << "==========" << endl;
+	return GetLeastNumbers_SolutionCore(numbers, size, k);
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> numbers = { 4,5,1,6,2,7,3,8 };
+
+	vector<int> result = GetLeastNumbers_Solution(numbers, 4);
+
+	auto begin = result.begin();
+	auto end = result.end();
+
+	while (begin != end) {
+		cout <<"final result is: "<< *begin << endl;
+		++begin;
+	}
+
+}
