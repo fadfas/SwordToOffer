@@ -7,7 +7,7 @@ using std::endl;
 
 int RandomPivot(int start, int end) {
 	srand((unsigned)time(NULL));	
-	return	rand() % (end - start+1)+start;
+	return	rand() % (end - start+1);
 	
 }
 
