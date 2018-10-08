@@ -36,6 +36,8 @@ int Partition(int data[], int length, int start, int end) {
 
 	++small;
 	swap(data, small, end);
+	
+	return small;
 	}
 
 void QuickSort(int data[], int length, int start, int end) {
