@@ -1,0 +1,131 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+int RandomPivot(int start, int end) {
+	srand((unsigned)time(NULL));
+	return	rand() % (end - start + 1) + start;
+
+}
+
+void swap(int* data, int a, int b) {
+	int temp = data[a];
+	data[a] = data[b];
+	data[b] = temp;
+}
+
+int Partition(int data[],int length, int begin, int end) {
+	if (data == nullptr || length <= 0 || begin < 0 || end < 0||end>=length) {
+		return 0;
+	}
+	
+	int pivot = RandomPivot(begin, end);
+
+	swap(data,pivot, end);
+
+	int small = begin - 1;
+
+	for (int index = begin; index < end; ++index) {
+		if (data[index] < data[end]) {
+			++small;
+			if (small != index) {
+				swap(data, small, index);
+			}
+		}
+	}
+
+	++small;
+	swap(data, small, end);
+	
+	return small;
+}
+
+bool check(int* number, int length, int result) {
+	int count = 0;
+	
+	for (int i = 0; i < length; ++i) {
+		if (number[i] == result) {
+			++count;
+		}
+	}
+
+	if (2 * count > length) {
+		return true;
+	}
+
+	return 0;
+}
+
+int MoreThanHalfNumber(int* number, int length) {
+	if (number == nullptr || length < 0) {
+		return 0;
+	}
+
+	int middle = length>>1;
+	
+	int start = 0;
+	int end = length - 1;
+
+	int pivot = Partition(number, length, start, end);
+
+	while (pivot != middle) {
+		if (pivot > middle) {
+			end = pivot - 1;
+			pivot = Partition(number, length, start, end);
+		}
+		else
+		{
+			start = pivot + 1;
+			pivot = Partition(number, length, start, end);
+		}
+	}
+
+	int result = number[pivot];
+
+	if (check(number, length, result)) {
+		return result;
+	}
+
+	return 0;
+}
+
+int MoreThanHalfNum_Solution(vector<int> numbers) {
+	int size = numbers.size();
+	int* number = new int[size];
+
+	auto begin = numbers.begin();
+	auto end = numbers.end();
+	int i = 0;
+	while (begin != end) {
+		int num = *begin;
+		number[i] = num;
+		++i;
+		++begin;
+	}
+
+	return MoreThanHalfNumber(number, size);
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> numbers = { 1,2,2,2,2,2,3,4 };
+
+	int result = MoreThanHalfNum_Solution(numbers);
+
+	cout << result << endl;
+
+}
