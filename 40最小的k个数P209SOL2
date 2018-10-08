@@ -1,0 +1,73 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<functional>
+#include<set>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+using std::greater;
+
+vector<int> GetLeastNumbers_Solution(vector<int> input, int k) {
+	std::multiset<int, greater<int>> result;
+	vector<int> result_vector = {};
+	if (input.size() < k || k < 1) {
+		return result_vector;
+	}
+
+	auto begin = input.begin();
+	auto end = input.end();
+
+	while (begin != end) {
+		if (result.size() < k) {
+			result.insert(*begin);
+		}
+		else
+		{
+			auto maxInMultiset = result.begin();
+			if (*begin < *maxInMultiset) {
+				result.erase(maxInMultiset);
+				result.insert(*begin);
+			}
+		}
+		++begin;
+	}
+
+
+	auto beginMultiSet = result.begin();
+	auto endMultiSet = result.end();
+
+	while (beginMultiSet != endMultiSet) {
+		result_vector.push_back(*beginMultiSet);
+		++beginMultiSet;
+
+	}
+
+	return result_vector;
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> numbers = { 4,5,1,6,2,7,3,8 };
+	vector<int> result = GetLeastNumbers_Solution(numbers, 4);
+
+	auto begin = result.begin();
+	auto end = result.end();
+
+	while (begin != end) {
+		cout << "final result is: " << *begin << endl;
+		++begin;
+	}
+
+}
