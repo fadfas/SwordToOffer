@@ -5,10 +5,9 @@
 using std::cout;
 using std::endl;
 
-int RandomPivot(int start, int end) {
-	srand((unsigned)time(NULL));	
-	return	rand() % (end - start+1);
-	
+int RandomPivort(int start, int end) {
+	int random = rand() % (end - start + 1) + start;
+	return random;
 }
 
 void swap(int data[], int a, int b) {
