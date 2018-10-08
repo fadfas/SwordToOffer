@@ -1,0 +1,88 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+bool check(int* number, int length, int result) {
+	int count = 0;
+
+	for (int i = 0; i < length; ++i) {
+		if (number[i] == result) {
+			++count;
+		}
+	}
+
+	if (2 * count > length) {
+		return true;
+	}
+
+	return 0;
+}
+
+int MoreThanHalfNumber(int* number, int length) {
+	if (number == nullptr || length < 0) {
+		return 0;
+	}
+
+	int result = number[0];
+	int times = 1;
+	for (int i = 1; i < length; ++i) {
+		if (times == 0) {
+			result = number[i];
+			times = 1;
+		}
+		if (number[i] == result) {
+			++times;
+		}
+		else
+		{
+			--times;
+		}
+	}
+
+	if (check(number,length,result)) {
+		return result;
+	}
+
+	return 0;
+}
+
+int MoreThanHalfNum_Solution(vector<int> numbers) {
+	int size = numbers.size();
+	int* number = new int[size];
+
+	auto begin = numbers.begin();
+	auto end = numbers.end();
+	int i = 0;
+	while (begin != end) {
+		int num = *begin;
+		number[i] = num;
+		++i;
+		++begin;
+	}
+
+	return MoreThanHalfNumber(number, size);
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> numbers = { 1,2,2,2,2,2,3,4 };
+
+	int result = MoreThanHalfNum_Solution(numbers);
+
+	cout << result << endl;
+
+}
