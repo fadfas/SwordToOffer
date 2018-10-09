@@ -1,0 +1,119 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+class Solution {
+private:
+	vector<int> min;
+	vector<int> max;
+
+public:
+	void Insert(int num)
+	{
+		if (((min.size() + max.size()) & 1) == 0) {
+			//偶数，插入最小堆，即中位数右侧
+			if (max.size() > 0 && num < max[0]) {
+				max.push_back(num);
+				push_heap(max.begin(), max.end(), less<int>());
+
+				num = max[0];
+
+				pop_heap(max.begin(), max.end(),less<int>());
+				max.pop_back();
+			}
+
+			min.push_back(num);
+			push_heap(min.begin(), min.end(), greater<int>());
+
+		}
+		else
+		{
+			//元素总数量为奇数，插入最大堆，即中位数左侧
+			if (min.size() > 0 && num > min[0]) {
+				min.push_back(num);
+				push_heap(min.begin(), min.end(), greater<int>());
+
+				num = min[0];
+
+				pop_heap(min.begin(), min.end(), greater<int>());
+				min.pop_back();
+			}
+
+			max.push_back(num);
+			push_heap(max.begin(), max.end(), less<int>());
+		}
+	}
+
+	double GetMedian()
+	{
+		int size = min.size() + max.size();
+
+		double median = 0;
+
+		if ((size & 1) == 1) {
+			median = min[0];
+		}
+		else
+		{
+
+			median = (min[0] + max[0]) / 2.0;
+		}
+
+		return median;
+	}
+
+};
+
+int main(int argc, char* argv[])
+{
+	Solution data;
+
+	data.Insert(5);
+
+	cout << data.GetMedian() << endl;
+	cout << "======" << endl;
+	data.Insert(2);
+
+	cout << data.GetMedian() << endl;
+
+	cout << "======" << endl;
+	data.Insert(3);
+
+	cout << data.GetMedian() << endl;
+
+	cout << "======" << endl;
+	data.Insert(4);
+
+	cout << data.GetMedian() << endl;
+
+	cout << "======" << endl;
+	data.Insert(1);
+
+	cout << data.GetMedian() << endl;
+
+	cout << "======" << endl;
+	data.Insert(6);
+
+	cout << data.GetMedian() << endl;
+	
+}
