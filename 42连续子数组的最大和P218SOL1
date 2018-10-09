@@ -1,0 +1,61 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+int FindGreatestSumOfSubArray(vector<int> array) {
+	if (array.size() == 0) {
+		return 0;
+	}
+
+	auto begin = array.begin();
+	auto end = array.end();
+
+	int currentSum = 0;
+	int greatesSum = 0x80000000;
+	
+	while (begin != end) {
+		if (currentSum < 0) {
+			currentSum = *begin;
+		}
+		else
+		{
+			currentSum += *begin;
+		}
+
+		if (currentSum > greatesSum) {
+			greatesSum = currentSum;
+		}
+
+		++begin;
+
+	}
+
+	return greatesSum;
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> test{ 1,2,2,3,4 };
+
+	cout << FindGreatestSumOfSubArray(test) << endl;
+}
