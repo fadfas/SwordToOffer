@@ -1,0 +1,55 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+static bool cmp(int a, int b) {
+
+	string aString = to_string(a);
+	string bString = to_string(b);
+
+	return (aString+bString)<(bString+aString);
+}
+
+
+string PrintMinNumber(vector<int> numbers) {
+
+	string result;
+	if (numbers.size() == 0) {
+		return result;
+	}
+
+	sort(numbers.begin(), numbers.end(), cmp);
+
+	for (auto each : numbers) {
+		result += to_string(each);
+	}
+
+	return result;
+}
+
+
+int main(int argc, char* argv[])
+{
+	vector<int> temp = { 2,5,1 };
+	cout << PrintMinNumber(temp) << endl;
+}
