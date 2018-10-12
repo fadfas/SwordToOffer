@@ -1,0 +1,163 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+int GetTranslationCountCore(const string& number_str);
+
+int GetTranslationCount(int number) {
+	if (number < 0) {
+		return 0;
+	}
+
+	string number_str = to_string(number);
+
+	return GetTranslationCountCore(number_str);
+}
+
+int GetTranslationCountCore(const string& number_str) {
+	int length = number_str.length();
+	int* counts = new int[length];
+
+
+	for (int i = length - 1; i >= 0; --i) {
+		int count = 0;
+
+		if (i == length - 1) {
+			count= 1;
+		}
+		else {
+			count = counts[i + 1] ;
+		}
+
+		if (i < length - 1) {
+			int digit1 = number_str[i]-'0';
+			int digit2 = number_str[i + 1]-'0';
+
+			int number = digit1 * 10 + digit2;
+
+			if (number <= 25 && number >= 10) {
+				if (i == length - 2) {
+					count += 1;
+				}
+				else {
+					count += counts[i + 2];
+				}
+			}
+		}
+
+		counts[i] = count;
+	}
+
+	int result = counts[0];
+
+	delete[] counts;
+
+	return result;
+}
+
+// ====================测试代码====================
+void Test(const string& testName, int number, int expected)
+{
+	if (GetTranslationCount(number) == expected)
+		cout << testName << " passed." << endl;
+	else
+		cout << testName << " FAILED." << endl;
+}
+
+void Test1()
+{
+	int number = 0;
+	int expected = 1;
+	Test("Test1", number, expected);
+}
+
+void Test2()
+{
+	int number = 10;
+	int expected = 2;
+	Test("Test2", number, expected);
+}
+
+void Test3()
+{
+	int number = 125;
+	int expected = 3;
+	Test("Test3", number, expected);
+}
+
+void Test4()
+{
+	int number = 126;
+	int expected = 2;
+	Test("Test4", number, expected);
+}
+
+void Test5()
+{
+	int number = 426;
+	int expected = 1;
+	Test("Test5", number, expected);
+}
+
+void Test6()
+{
+	int number = 100;
+	int expected = 2;
+	Test("Test6", number, expected);
+}
+
+void Test7()
+{
+	int number = 101;
+	int expected = 2;
+	Test("Test7", number, expected);
+}
+
+void Test8()
+{
+	int number = 12258;
+	int expected = 5;
+	Test("Test8", number, expected);
+}
+
+void Test9()
+{
+	int number = -100;
+	int expected = 0;
+	Test("Test9", number, expected);
+}
+
+int main(int argc, char* argv[])
+{
+	Test1();
+	Test2();
+	Test3();
+	Test4();
+	Test5();
+	Test6();
+	Test7();
+	Test8();
+	Test9();
+
+	return 0;
+}
