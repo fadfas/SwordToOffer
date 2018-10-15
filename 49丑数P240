@@ -1,0 +1,52 @@
+class Solution {
+public:
+
+int getMin(int num1, int num2, int num3) {
+	int min = (num1 < num2) ? num1 : num2;
+	min = (min < num3) ? min : num3;
+
+	return min;
+}
+
+int GetUglyNumber_Solution(int index) {
+	if (index < 0) {
+		return 0;
+	}
+
+	int* pUglyNumbers = new int[index];
+	pUglyNumbers[0] = 1;
+	int nextUglyNumber = 1;
+
+	int* pUglyNumber2 = pUglyNumbers;
+	int* pUglyNumber3 = pUglyNumbers;
+	int* pUglyNumber5 = pUglyNumbers;
+
+	while (nextUglyNumber < index) {
+		int min = getMin(*pUglyNumber2 * 2, *pUglyNumber3 * 3, *pUglyNumber5 * 5);
+		pUglyNumbers[nextUglyNumber] = min;
+
+		while (*pUglyNumber2 * 2 <= min) {
+			++pUglyNumber2;
+		}
+
+		while (*pUglyNumber3 * 3 <= min)
+		{
+			++pUglyNumber3;
+		}
+
+		while (*pUglyNumber5 * 5 <= min)
+		{
+			++pUglyNumber5;
+		}
+
+
+		++nextUglyNumber;
+	}
+
+	int result = pUglyNumbers[index - 1];
+	delete[] pUglyNumbers;
+
+	return result;
+}
+
+};
