@@ -1,0 +1,65 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+struct TreeNode {
+	int val;
+	struct TreeNode *left;
+	struct TreeNode *right;
+	TreeNode(int x) :
+		val(x), left(NULL), right(NULL) {
+	}
+};
+
+int TreeDepthCore(TreeNode* pNode, bool &flag) {
+	if (pNode == nullptr) {
+		return 0;
+	}
+	int leftDepth = 0;
+	int rightDepth = 0;
+
+	leftDepth = TreeDepthCore(pNode->left, flag);
+
+	rightDepth = TreeDepthCore(pNode->right, flag);
+	if (flag) {
+		flag = (abs(leftDepth - rightDepth) > 1) ? false : true;
+	}
+	return ((leftDepth > rightDepth) ? leftDepth : rightDepth) + 1;
+}
+
+bool IsBalanced_Solution(TreeNode* pRoot)
+{
+
+	if (pRoot == nullptr) {
+		return true;
+	}
+
+	bool flag = true;
+	int maxDepth = TreeDepthCore(pRoot, flag);
+	return flag;
+}
+
+int main(int argc, char* argv[])
+{
+
+}
