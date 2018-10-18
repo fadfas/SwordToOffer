@@ -1,0 +1,63 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<functional>
+#include<set>
+#include<limits>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+using std::greater;
+
+void Reverse(char* pBegin, char* pEnd) {
+	if (pBegin == nullptr || pEnd == nullptr) {
+		return;
+	}
+
+	while (pBegin < pEnd) {
+		char temp = *pBegin;
+		*pBegin = *pEnd;
+		*pEnd = temp;
+
+		pBegin++;
+		pEnd--;
+	}
+
+}
+
+string LeftRotateString(string str, int n) {
+	if (str.size() <= 0||n<0||n>str.size()) {
+		return "";
+	}
+
+	char* strCharArray = (char*)str.c_str();
+	char* strCharArrayOriginal = strCharArray;
+	char* p1Begin = strCharArray;
+	char* p1End = strCharArray + n - 1;
+
+	char* p2Begin = strCharArray + n;
+	char* p2End = strCharArray + str.size() - 1;
+
+	Reverse(p1Begin, p1End);
+	Reverse(p2Begin, p2End);
+
+	Reverse(strCharArray, strCharArray + str.size() - 1);
+
+	return strCharArrayOriginal;
+}
+
+int main(int argc, char* argv[])
+{
+
+}
