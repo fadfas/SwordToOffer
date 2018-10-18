@@ -1,0 +1,86 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+void Reverse(char* pBegin, char* pEnd) {
+	if (pBegin == nullptr || pEnd == nullptr) {
+		return;
+	}
+
+	while (pBegin < pEnd) {
+		char temp = *pBegin;
+		*pBegin = *pEnd;
+		*pEnd = temp;
+
+		pBegin++;
+		pEnd--;
+	}
+	
+}
+
+
+string ReverseSentence(string str) {
+	if (str.size() <= 0) {
+		return "";
+	}
+
+	char* strCharArray = (char*)str.c_str();
+
+	char* pBegin = strCharArray;
+	char* pEnd = strCharArray;
+
+	while (*pEnd != '\0') {
+		++pEnd;
+	}
+
+
+	--pEnd;
+
+	Reverse(pBegin, pEnd);
+	pBegin = pEnd = strCharArray;
+	while (*pBegin != '\0') {
+		if (*pBegin == ' ') {
+			++pBegin;
+			++pEnd;
+		}
+		else if (*pEnd == ' ' || *pEnd == '\0') {
+			Reverse(pBegin, --pEnd);
+			pBegin = ++pEnd;
+		}
+		else
+		{
+			++pEnd;
+		}
+	}
+
+	string result = strCharArray;
+
+	return result;
+}
+
+
+
+int main(int argc, char* argv[])
+{
+	cout << ReverseSentence("I am very good.") << endl;
+}
