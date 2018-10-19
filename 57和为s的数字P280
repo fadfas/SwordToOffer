@@ -1,0 +1,32 @@
+
+vector<int> FindNumbersWithSum(vector<int> array, int sum) {
+	vector<int> result = {};
+	if (array.size() < 2) {
+		return result;
+	}
+
+	auto cBegin = array.begin();
+	auto cEnd = array.end();
+	--cEnd;
+
+	while (cBegin!=cEnd)
+	{
+		if (*cBegin + *cEnd==sum) {
+			result.push_back(*cBegin);
+			result.push_back(*cEnd);
+
+			return result;
+		}
+		else if (*cBegin+*cEnd<sum)
+		{
+			++cBegin;
+		}
+		else {
+			--cEnd;
+		}
+
+
+	}
+
+	return result;
+}
