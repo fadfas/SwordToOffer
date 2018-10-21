@@ -1,3 +1,18 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
 
 vector<int> maxInWindows(const vector<int>& num, unsigned int size)
 {
@@ -30,4 +45,18 @@ vector<int> maxInWindows(const vector<int>& num, unsigned int size)
 	}
 
 	return result;
+}
+
+int main() {
+	vector<int> num = { 16,14,12,10,8,6,4 };
+
+	vector<int> result = maxInWindows(num, 5);
+
+	auto cBegin = result.begin();
+	auto cEnd = result.end();
+
+	while (cBegin != cEnd) {
+		cout << *cBegin << " ";
+		++cBegin;
+	}
 }
