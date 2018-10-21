@@ -1,0 +1,33 @@
+
+vector<int> maxInWindows(const vector<int>& num, unsigned int size)
+{
+	vector<int> result;
+	deque<int> index;
+	if (num.size() < size&&size < 1) {
+		return result;
+	}
+
+	for (unsigned int i = 0; i < num.size(); ++i) {
+		while (index.size() && num[i] > num[index.back()]) {
+			index.pop_back();
+		}
+
+		//while (index.size() && ((i - size + 1) > index.front() )) {
+		//	index.pop_front();
+		//}
+		while (index.size() && ((i - index.front() + 1) > size )) {
+			index.pop_front();
+		}
+
+		//while (index.size() && i - index.front() + 1 > size)//当当前窗口移出队首元素所在的位置，即队首元素坐标对应的num不在窗口中，需要弹出
+		//	index.pop_front();
+
+		index.push_back(i);
+
+		if (i >= size - 1) {
+			result.push_back(num[index.front()]);
+		}
+	}
+
+	return result;
+}
