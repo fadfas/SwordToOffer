@@ -1,0 +1,68 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+bool IsContinuous(vector<int> numbers) {
+	if (numbers.size() < 5) {
+		return false;
+	}
+
+	sort(numbers.begin(), numbers.end());
+
+	auto cBegin = numbers.begin();
+	auto cEnd = numbers.end();
+
+	int numberOfZero = 0;
+	int numberOfGap = 0;
+
+	for (; (cBegin != cEnd) && ((*cBegin) == 0); ++cBegin) {
+		++numberOfZero;
+	}
+
+	auto cCurrent = cBegin;
+	auto cNext = ++cBegin;
+
+	while (cNext != cEnd)
+	{
+		if (*cNext == *cCurrent) {
+			return false;
+		}
+		numberOfGap += (*cNext - *cCurrent - 1);
+		++cCurrent;
+		++cNext;
+	}
+
+	return (numberOfZero >= numberOfGap) ? true : false;
+}
+
+int main(int argc, char* argv[])
+{
+	vector<int> test = { };
+	if (IsContinuous(test)) {
+		cout << "Continuous" << endl;
+	}
+	else
+	{
+		cout << "Not Continuous" << endl;
+	}
+}
