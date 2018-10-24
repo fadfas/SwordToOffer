@@ -1,0 +1,50 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+#include<ctime>
+#include<algorithm>
+#include<functional>
+#include<list>
+//using std::cout;
+//using std::endl;
+//using std::array;
+//using std::string;
+//using std::vector;
+//using std::deque;
+//using std::less;
+//using std::greater;
+
+using namespace std;
+
+vector<int> multiply(const vector<int>& A) {
+	vector<int> result;
+	if (A.size() < 2) {
+		return result;
+	}
+
+	int ci = 1;
+	result.push_back(ci);
+	for (int i = 0; i < A.size() - 1; ++i) {
+		ci *= A[i];
+		result.push_back(ci);
+	}
+	int di = 1;
+	for (int i = A.size() - 2; i >= 0; --i) {
+		di *= A[i + 1];
+		result[i] *= di;
+	}
+
+	return result;
+}
+
+int main(int argc, char* argv[])
+{
+	
+}
