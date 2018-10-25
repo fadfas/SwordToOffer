@@ -1,0 +1,48 @@
+
+int StrToInt(string str) {
+	bool isMinus = false;
+	long long number = 0;
+
+	if (str.size() == 0) {
+		return 0;
+	}
+
+	char* strArray = (char*)str.c_str();
+
+	if (*strArray == '\0') {
+		return 0;
+	}
+
+	if (*strArray == '+') {
+		isMinus = false;
+		++strArray;
+	}
+	else if (*strArray == '-')
+	{
+		isMinus = true;
+		++strArray;
+	}
+
+	while (*strArray != '\0') {
+		if (*strArray >= '0'&&*strArray <= '9') {
+			number = number * 10 + (isMinus == true ? -1 : 1)*(*strArray - '0');
+			++strArray;
+
+			if (((!isMinus) && number > 0x7FFFFFFF) || (isMinus && (number < (signed int)0x80000000))) {
+				return 0;
+			}
+		}
+		else
+		{
+			return 0;
+		}
+
+	}
+
+	if (*strArray != '\0') {
+		return 0;
+	}
+
+	return (int)number;
+
+}
