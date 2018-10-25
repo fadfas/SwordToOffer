@@ -1,0 +1,56 @@
+
+bool GetNodePath(const TreeNode* pRoot, const TreeNode* pNode, list<const TreeNode*>& path) {
+	if (pRoot == pNode) {
+		return true;
+	}
+
+	path.push_back(pRoot);
+
+	bool found = false;
+	auto pChildren = pRoot->m_vChildren;
+	auto cBegin = pChildren.begin();
+	while ((!found) && (cBegin != pChildren.end())) {
+		found = GetNodePath(*cBegin, pNode, path);
+		++cBegin;
+	}
+
+	if (!found) {
+		path.pop_back();
+	}
+
+	return found;
+}
+
+const TreeNode* GetLastCommonNode(list<const TreeNode*> path1, list<const TreeNode*> path2) {
+	const TreeNode* result = nullptr;
+
+	auto cBegin1 = path1.begin();
+	auto cBegin2 = path2.begin();
+
+	while (cBegin1 != path1.end() && cBegin2 != path2.end())
+	{
+		if (*cBegin1 == *cBegin2) {
+			result = *cBegin1;
+		}
+
+		++cBegin1;
+		++cBegin2;
+	}
+
+	return result;
+}
+
+const TreeNode* GetLastCommonParent(const TreeNode* pRoot, const TreeNode* pNode1, const TreeNode* pNode2)
+{
+	if (pRoot == nullptr || pNode1 == nullptr || pNode2 == nullptr) {
+		return nullptr;
+	}
+
+	list<const TreeNode*> path1;
+	GetNodePath(pRoot, pNode1, path1);
+
+	list<const TreeNode*> path2;
+	GetNodePath(pRoot, pNode2, path2);
+
+	return GetLastCommonNode(path1, path2);
+}
