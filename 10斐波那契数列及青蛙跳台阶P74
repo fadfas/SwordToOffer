@@ -1,0 +1,36 @@
+
+int Fibonacci(int n) {
+	int result[2] = { 0,1 };   //0,1的顺序不要弄颠倒
+	if (n < 2) {
+		return result[n];
+	}
+	int bigger = 1;
+	int smaller = 0;
+	int num = 0;          //数很大的时候，要用long long
+	for (int i = 2; i <= n; ++i) {
+		num = smaller + bigger;
+		smaller = bigger;
+		bigger = num;
+	}
+	return num;
+}
+此算法同样适用于用2*1方块填充2*8大矩形的题目
+
+int jumpFloor(int number) {
+		int n = number;
+		int result[2] = { 1,2 };   //跳青蛙问题要注意起始条件
+		if (n < 3) {
+			return result[n - 1];
+		}
+		int bigger = 2;
+		int smaller = 1;
+		int num = 0;
+		for (int i = 3; i <= n; ++i) {   //跳青蛙问题要注意起始条件
+			num = smaller + bigger;
+			smaller = bigger;
+			bigger = num;
+		}
+		return num;
+}
+	
+	
