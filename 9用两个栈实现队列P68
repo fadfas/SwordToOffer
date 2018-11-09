@@ -1,0 +1,28 @@
+class Solution
+{
+public:
+	void push(int node) {
+		stack1.push(node);
+	}
+
+	int pop() {
+		if (stack2.empty()) {              //还是用书上的判断顺序吧：先判断2是否空，若空，则将1的元素全部移动到2；然后判断2是否为空；然后再弹出2的顶部元素
+			while (!stack1.empty()) {       //此代码就是书上的版本
+				int ele = stack1.top();
+				stack2.push(ele);
+				stack1.pop();
+			}
+		}
+		if (stack2.empty()) {
+			throw new exception("Empty");
+		}
+
+		int result = stack2.top();
+		stack2.pop();
+		return result;
+	}
+
+private:
+	stack<int> stack1;
+	stack<int> stack2;
+};
