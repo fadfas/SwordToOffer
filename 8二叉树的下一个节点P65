@@ -1,0 +1,33 @@
+struct TreeLinkNode {
+	int val;
+	struct TreeLinkNode *left;
+	struct TreeLinkNode *right;
+	struct TreeLinkNode *next;
+	TreeLinkNode(int x) :val(x), left(NULL), right(NULL), next(NULL) {
+
+	}
+};
+
+TreeLinkNode* GetNext(TreeLinkNode* pNode)
+{
+	if (pNode == nullptr) {
+		return nullptr;
+	}
+
+	if (pNode->right) {
+		TreeLinkNode* pRightNode = pNode->right;
+		while (pRightNode->left) {
+			pRightNode = pRightNode->left;
+		}
+		return pRightNode;
+	}
+	else if (pNode->next) {  ///////////////////
+		while (pNode->next != nullptr&&pNode->next->right == pNode) {
+			pNode = pNode->next;
+		}
+
+		return pNode->next;
+	}
+
+	return nullptr;
+}
