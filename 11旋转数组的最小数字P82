@@ -1,0 +1,42 @@
+int minNumberInRotateArray(vector<int> rotateArray) {
+	if (rotateArray.size() == 0) {
+		return 0;
+	}
+
+	auto cBegin = rotateArray.begin();
+	auto cEnd = rotateArray.end();
+	--cEnd;
+	int result = 0;
+	if (*cBegin < *cEnd) {
+		result = *cBegin;
+	}
+	else
+	{
+		while (cBegin < cEnd) {
+			if (cEnd - cBegin == 1) {
+				break;
+			}
+			auto cMiddle = cBegin + (cEnd - cBegin) / 2;
+			if (*cMiddle > *cEnd) {
+				cBegin = cMiddle;
+			}
+			else if (*cMiddle == *cEnd)
+			{
+				--cEnd;
+			}
+			else
+			{
+				cEnd = cMiddle;
+			}
+		}
+		
+		result = *cEnd;
+	}
+
+	return result;
+}
+
+int main() {
+	vector<int> test= {9719, 9895, 9896, 9913, 9962, 154, 293, 334};
+	cout << minNumberInRotateArray(test) << endl;
+}
