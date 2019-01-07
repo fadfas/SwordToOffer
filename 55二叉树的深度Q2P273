@@ -31,34 +31,31 @@ struct TreeNode {
 	}
 };
 
-int TreeDepthCore(TreeNode* pNode, bool &flag) {
-	if (pNode == nullptr) {
+int IsBanlanced_SolutionRecursively(TreeNode* pRoot) {
+	if (pRoot == nullptr) {
 		return 0;
 	}
-	int leftDepth = 0;
-	int rightDepth = 0;
 
-	leftDepth = TreeDepthCore(pNode->left, flag);
-
-	rightDepth = TreeDepthCore(pNode->right, flag);
-	if (flag) {
-		flag = (abs(leftDepth - rightDepth) > 1) ? false : true;
+	int leftDepth = IsBanlanced_SolutionRecursively(pRoot->left);
+	if (leftDepth == -1) {
+		return -1;
 	}
-	return ((leftDepth > rightDepth) ? leftDepth : rightDepth) + 1;
+
+	int rightDepth = IsBanlanced_SolutionRecursively(pRoot->right);
+	if (rightDepth == -1) {
+		return -1;
+	}
+
+	return abs(leftDepth - rightDepth) > 1 ? -1 : max(leftDepth, rightDepth) + 1;
 }
 
-bool IsBalanced_Solution(TreeNode* pRoot)
-{
-
+bool IsBalanced_Solution(TreeNode* pRoot) {
 	if (pRoot == nullptr) {
 		return true;
 	}
 
-	bool flag = true;
-	int maxDepth = TreeDepthCore(pRoot, flag);
-	return flag;
+	return IsBanlanced_SolutionRecursively(pRoot) != -1;
 }
-
 int main(int argc, char* argv[])
 {
 
