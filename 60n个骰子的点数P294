@@ -26,7 +26,7 @@ int g_maxValue = 6;
 
 void Probability(int original, int current, int sum, int* probabilities) {
 	if (current == 0) {  //注意和书的区别，我的这种写法，递归的种植条件是curren==0
-		probabilities[sum-original]++;  //不能写成probabilities[sum]++
+		probabilities[sum - original]++;  //不能写成probabilities[sum]++
 	}
 	else
 	{
@@ -48,24 +48,26 @@ void PrintProbability_Solution1(int number) {
 	Probability(number, number, 0, probabilities);
 
 	int total = pow(g_maxValue, number);
-	for (int i = number; i <=number*g_maxValue; ++i) {    //不是i<=number*g_maxValue
-		double ratio =(double) probabilities[i - number] / total;  //必须进行类型转换！！！
+	for (int i = number; i <= number * g_maxValue; ++i) {    //不是i<=number*g_maxValue
+		double ratio = (double)probabilities[i - number] / total;  //必须进行类型转换！！！
 		printf("%d: %e\n", i, ratio);
 	}
 
 	delete[] probabilities;
 }
 
-void PrintProbability_Solution2(int n) {
-	if (n < 1) {
+void PrintProbability_Solution2(int number)
+{
+	if (number < 1)
 		return;
-	}
 
-	int* pProbabilities[2];
-	pProbabilities[0] = new int[n*g_maxValue + 1];
-	pProbabilities[1] = new int[n*g_maxValue + 1];
+	//另一种二维数组声明方法：  int** pProbabilities=new int*[2]; pProbabilities[0]=new int[g_maxValue*number+1]
 
-	for (int i = 0; i < n*g_maxValue + 1; ++i) {
+	int* pProbabilities[2];  //二维数组声明方法，不可以; int* pProbabilities=new int*[2]  
+	pProbabilities[0] = new int[g_maxValue*number + 1];
+	pProbabilities[1] = new int[g_maxValue*number + 1];
+
+	for (int i = 0; i < g_maxValue*number + 1; ++i) {
 		pProbabilities[0][i] = 0;
 		pProbabilities[1][i] = 0;
 	}
@@ -73,33 +75,31 @@ void PrintProbability_Solution2(int n) {
 	int flag = 0;
 
 	for (int i = 1; i <= g_maxValue; ++i) {
-		pProbabilities[flag][i] = 1;
+		pProbabilities[flag][i] = 1;  //对于这种比较复杂的情况，其初始情况可以单独处理一下，剩余的部分再用一个通用循环去处理
 	}
 
-	for (int k = 2; k <= n; ++k) {
+	for (int k = 2; k <= number; ++k) {
 		for (int i = 0; i < k; ++i) {
 			pProbabilities[1 - flag][i] = 0;
 		}
 
-		for (int i = k; i <= k*g_maxValue; ++i) {
+		for (int i = k; i <= g_maxValue * k; ++i) {
 			pProbabilities[1 - flag][i] = 0;
-			for (int j = 1; i - j >= 0 && j <= g_maxValue; ++j) {
+			for (int j = 1; j <= g_maxValue && i - j > 0; ++j) {
 				pProbabilities[1 - flag][i] += pProbabilities[flag][i - j];
 			}
 		}
 		flag = 1 - flag;
 	}
 
-	int total = pow(g_maxValue, n);
-	
-	for (int i = n; i <= n * g_maxValue; ++i) {
-		double ratio = (double)(pProbabilities[flag][i]) / total;
-		printf("%d:%e\n", i, ratio);
+	double total = pow(g_maxValue, number);
+	for (int i = number; i < number*g_maxValue + 1; ++i) {
+		double ratio = (double)pProbabilities[flag][i] / total;   //不是pProbabilities[1-flag][i]，原因见书标注
+		printf("%d: %e\n", i, ratio);
 	}
 
 	delete[] pProbabilities[0];
 	delete[] pProbabilities[1];
-	
 }
 
 // ====================测试代码====================
