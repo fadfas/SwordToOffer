@@ -24,41 +24,36 @@ using namespace std;
 
 int g_maxValue = 6;
 
-void Probability(int original, int current, int sum, int* pProbabilities) {
-	if (current == 1) {
-		pProbabilities[sum - original]++;
+void Probability(int original, int current, int sum, int* probabilities) {
+	if (current == 0) {  //注意和书的区别，我的这种写法，递归的种植条件是curren==0
+		probabilities[sum-original]++;  //不能写成probabilities[sum]++
 	}
 	else
 	{
 		for (int i = 1; i <= g_maxValue; ++i) {
-			Probability(original, current - 1, i + sum, pProbabilities);
+			Probability(original, current - 1, i + sum, probabilities);
 		}
 	}
 }
 
-void PrintProbability_Solution1(int n) {
-	if (n < 1) {
+void PrintProbability_Solution1(int number) {
+	if (number < 1) {
 		return;
 	}
 
-	int* pProbabilities = new int[n*g_maxValue - n + 1];
+	int* probabilities = new int[number*g_maxValue - number + 1];
+	for (int i = 0; i < number*g_maxValue - number + 1; ++i) {  //数组要初始化！！！！
+		probabilities[i] = 0;
+	}
+	Probability(number, number, 0, probabilities);
 
-	for (int i = 0; i < (n*g_maxValue - n + 1); ++i) {
-		pProbabilities[i] = 0;
+	int total = pow(g_maxValue, number);
+	for (int i = number; i <=number*g_maxValue; ++i) {    //不是i<=number*g_maxValue
+		double ratio =(double) probabilities[i - number] / total;  //必须进行类型转换！！！
+		printf("%d: %e\n", i, ratio);
 	}
 
-	for (int i = 1; i <= g_maxValue; ++i) {
-		Probability(n, n, i, pProbabilities);
-	}
-	
-	int total = pow(g_maxValue, n);
-
-	for (int i = 0; i < (n*g_maxValue - n + 1); ++i) {
-		double probability = (double)pProbabilities[i] / (double)total;
-		printf("%d:%e\n", i + n, probability);
-	}
-
-	delete[] pProbabilities;
+	delete[] probabilities;
 }
 
 void PrintProbability_Solution2(int n) {
