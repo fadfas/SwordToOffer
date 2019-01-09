@@ -26,54 +26,45 @@ void Reverse(char* pBegin, char* pEnd) {
 	if (pBegin == nullptr || pEnd == nullptr) {
 		return;
 	}
-
 	while (pBegin < pEnd) {
-		char temp = *pBegin;
-		*pBegin = *pEnd;
-		*pEnd = temp;
-
-		pBegin++;
-		pEnd--;
+		char temp = *pEnd;
+		*pEnd = *pBegin;
+		*pBegin = temp;
+		++pBegin;
+		--pEnd;
 	}
-	
 }
-
 
 string ReverseSentence(string str) {
 	if (str.size() <= 0) {
 		return "";
 	}
 
-	char* strCharArray = (char*)str.c_str();
-
-	char* pBegin = strCharArray;
-	char* pEnd = strCharArray;
-
+	char* strArray = (char*)str.c_str();/////
+	char* pBegin = strArray;
+	char* pEnd = strArray;
 	while (*pEnd != '\0') {
 		++pEnd;
 	}
-
-
 	--pEnd;
-
 	Reverse(pBegin, pEnd);
-	pBegin = pEnd = strCharArray;
-	while (*pBegin != '\0') {
-		if (*pBegin == ' ') {
-			++pBegin;
+
+	pBegin = pEnd = strArray;
+	while (true) {
+		while ((*pEnd!='\0')&&(*pEnd != ' ')||((*pEnd!=' ')&&(*pEnd!='\0'))) {  //这一行条件判断是关键，不可以简单的用
+											//*pEnd != ' '||*pEnd!='\0'
+											//因为此时遇到空格时，||后面的判断也会为true
+											//并最终整个表达式为true
 			++pEnd;
 		}
-		else if (*pEnd == ' ' || *pEnd == '\0') {
-			Reverse(pBegin, --pEnd);
-			pBegin = ++pEnd;
+		Reverse(pBegin, pEnd - 1);
+		if (*pEnd == '\0') {
+			break;
 		}
-		else
-		{
-			++pEnd;
-		}
+		pBegin = ++pEnd;	
 	}
 
-	string result = strCharArray;
+	string result = strArray;   /////
 
 	return result;
 }
