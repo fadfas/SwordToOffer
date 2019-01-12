@@ -4,51 +4,33 @@
 using std::cout;
 using std::endl;
 
-struct ListNode {
-	int m_nValue;
-	ListNode* m_pNext;
-};
-
-void DeleteDuplicaton(ListNode** pHead) {
-	if (pHead == nullptr||*pHead ==nullptr) {
-		return;
+ListNode* deleteDuplication(ListNode* pHead)
+{
+	if (pHead == nullptr || pHead->next == nullptr) {
+		return pHead;
 	}
 
-	ListNode* pPreNode = nullptr;
-	ListNode* pNode = *pHead;
-	
-	while (pNode!=nullptr) {
-		ListNode* pNext = pNode->m_pNext;
-		bool needDelete = false;
-		if (pNext != nullptr&&pNode->m_nValue == pNext->m_nValue) {
-			needDelete = true;
-		}
-		if (!needDelete) {
-			pPreNode = pNode;
-			pNode = pNode->m_pNext;
+	ListNode* newHead = new ListNode(-1);
+	newHead->next = pHead;  //别忘了要把新建的临时头节点链接起来
+	ListNode* preNode = newHead;
+	ListNode* pNode = pHead;
+	ListNode* pNext = nullptr;
+
+	while (pNode != nullptr&&pNode->next != nullptr) {
+		pNext = pNode->next;
+		if (pNode->val == pNext->val) {
+			while (pNext&&pNode->val == pNext->val) {  //此处不应写成pNext->next，因为重复的节点可能在最后一个，
+				pNext = pNext->next;                //另外，pNext->next只要求pNext不等于nullptr，不要求pNext->next不等于null
+			}
+			pNode = pNext;
+			preNode->next = pNext;  //发现重复节点后，无需更新preNode，但是因为删除了preNode后的重复节点，需要把preNode->next更新
 		}
 		else
 		{
-			int value = pNode->m_nValue;
-			ListNode* pToBeDel = pNode;
-			while (pToBeDel!=nullptr&&pToBeDel->m_nValue==value) {
-				pNext = pToBeDel->m_pNext;
-
-				delete pToBeDel;
-				pToBeDel = nullptr;
-
-				pToBeDel = pNext;
-			}
-			if (pPreNode == nullptr) {
-				*pHead = pNext;
-			}
-			else {
-				pPreNode->m_pNext = pNext;
-			}
+			preNode = pNode;
 			pNode = pNext;
-
 		}
 	}
-
-
+	return newHead->next; //不是返回newHead
 }
+
