@@ -1,40 +1,44 @@
-#include<iostream>	
-#include<string>
-#include<ctime>
-#include<cstdlib>
-using std::cout;
-using std::endl;
+#include <iostream>
+using namespace std;
 
-void SortAges(int ages[], int length) {
-	if (ages == 0 || length <= 0) {
-		throw new std::exception("Invalid Input.");
-	}
-
-	const int oldestAge = 99;
-	int timesOfAge[oldestAge + 1];
-
-	for (int i = 0; i <= oldestAge; ++i) {
-		timesOfAge[i] = 0;
-	}
-
-	for (int i = 0; i < length; ++i) {
-		int age = ages[i];
-		++timesOfAge[age];
-	}
-	int index = 0;
-	for (int i = 0; i <= oldestAge; ++i) {
-		for (int j = 0; j < timesOfAge[i]; ++j) {
-			ages[index] = i;
-			++index;
-		}
-	}
+int getMax(int arr[], const int size){
+    int max = 0;
+    for(int i = 0; i < size; ++i){
+        if(arr[i] > max) max = arr[i];
+    }
+    return max;
 }
 
-int main() {
-	int test[] = { 2,5,2,3,3,5,6,7 };
-	SortAges(test, 8);
-	for (auto i : test) {
-		cout << i << endl;
-	}
+void countingSort(int a[], int size_a, int b[], const int k){
+    int* c = new int[k+1];
 
+    for(int i = 0; i < k; ++i){
+        c[i] = 0; // 初始化计数数组
+    }
+
+    for(int i = 0; i < size_a; ++i){
+        c[a[i]]++; // 计数
+    }
+
+    for(int i = 1; i <= k; ++i){
+        c[i] += c[i-1]; // 累加
+    }
+
+    for(int i = size_a - 1; i >= 0; --i){ // 反向填充
+        b[c[a[i]] - 1] = a[i]; // 对应位置
+        c[a[i]]--; // 填充完成一个删一个
+    }
+
+}
+
+int main(){
+    int a[] = {2,5,3,0,2,3,0,3};
+    const int size_a = sizeof(a)/sizeof(int);
+    int* b = new int[size_a];
+
+    countingSort(a, size_a, b, getMax(a, size_a));
+    for(int i = 0; i < size_a; ++i){
+        cout << b[i] << " ";
+    }
+    return 0;
 }
