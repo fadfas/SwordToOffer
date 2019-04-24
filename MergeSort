@@ -1,0 +1,76 @@
+#include<cstring>
+#include<iostream>
+#include<cstring>
+#include<array>
+#include<string>
+#include<cstdio>
+#include<stack>
+#include<vector>
+#include<deque>
+#include<set>
+using std::cout;
+using std::endl;
+using std::array;
+using std::string;
+using std::vector;
+using std::deque;
+
+
+void merge(vector<int>& data, int low, int mid, int high) {
+	vector<int> temp(high-low+1);
+	int k = 0;
+	int i = low, j = mid + 1;
+	while (i <= mid && j <= high) {
+		if (data[i] < data[j]) {
+			temp[k++] = data[i++];
+		}
+		else {
+			temp[k++] = data[j++];
+		}
+	}
+	while(i <= mid) {
+		temp[k++] = data[i++];
+	}
+	while (j<=high)
+	{
+		temp[k++] = data[j++];
+	}
+	for (int i = 0; i < temp.size(); ++i) {
+		data[low + i] = temp[i];
+	}
+}
+
+void mergeSort1(vector<int>& data, int low, int high) {
+	if (low < high) {
+		int mid = low + ((high - low) >> 1);
+		mergeSort1(data, low, mid);
+		mergeSort1(data, mid + 1, high);
+		merge(data, low, mid, high);
+	}
+}
+
+void mergeSort2(vector<int>& data) {
+	int n = data.size();
+	int size = 1, low, mid, high;
+	while (size < n) {
+		low = 0;
+		while (low + size < n) {
+			mid = low + size - 1;
+			high = mid + size;
+			if (high > n - 1) {
+				high = n - 1;
+			}
+			merge(data, low, mid, high);
+			low = high + 1;
+		}
+		size *= 2;
+	}
+}
+
+int main() {
+	vector<int> data = { 1,5,3,6,6,68};
+	mergeSort2(data);
+	for (auto e : data) {
+		cout << e << " ";
+	}
+}
